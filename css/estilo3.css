@@ -1,0 +1,21 @@
+.inProcessItem{
+    font-size: 20px;
+    line-height: 60px;
+    width: 350px;
+    height: 60px;
+    color: rgb(237, 241, 245);
+    margin-top: 60px;
+    margin-bottom: 60px;
+    margin-left: 50px;
+    text-align: center;
+    background-image: url("https://i.pinimg.com/originals/7b/b5/88/7bb5885df4ace76cb7437b191abf4823.jpg");
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.inProcessMain{
+    margin-top: 150px;
+    width: 700px;
+    min-height: 600px;
+    background-image: url("https://static.vecteezy.com/system/resources/previews/002/494/291/non_2x/dark-black-technology-background-vector.jpg");
+}
