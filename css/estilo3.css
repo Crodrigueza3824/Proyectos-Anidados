@@ -14,8 +14,39 @@
 }
 
 .inProcessMain{
-    margin-top: 150px;
+    
     width: 700px;
     min-height: 600px;
     background-image: url("https://static.vecteezy.com/system/resources/previews/002/494/291/non_2x/dark-black-technology-background-vector.jpg");
+}
+
+
+.mainy{
+    display: flex;
+    margin-top: 150px;
+}
+
+.divEstadistica{
+    margin-left: 450px;
+}
+
+.inProcessA{
+    text-decoration: none;
+}
+
+.header1{
+	background-color: rgb(65, 127, 172);
+	height: 80px;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+
+}
+
+.mainDesign{
+    display: flex;
+    background-color: black;
+    margin: 150px auto;
+
 }
