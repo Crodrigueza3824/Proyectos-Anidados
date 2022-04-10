@@ -3,39 +3,92 @@ session_start();
 
 require 'db.php';
 
-
-
 if(isset($_SESSION['user_id'])){
-    $records = $conn->prepare('SELECT id, email, password, nombre FROM usuarios WHERE id = :id');
+    $records = $conn->prepare('SELECT id, email, nombre, password FROM usuarios WHERE id = :id');
     $records->bindParam(':id', $_SESSION['user_id']);
     $records->execute();
     $results = $records->fetch(PDO::FETCH_ASSOC);
-    
-    
 
-    if(count($results) > 0) {
-        $user = $results;
+
+}
+
+if(!empty($results)){
+    $user = $results;
+}
+
+$estru = '';
+$estru1 = '';
+$estru2 = '';
+
+
+if(isset($_POST['tipoDiseño'])){
+    $getInput = $_POST['tipoDiseño'];
+    $selectedOption = "";
+    foreach($getInput as $option =>$value){
+        $selectedOption .= $value;
     }
+    $estru =  strval($selectedOption);
+
 }
 
 
-if(!empty($_POST['nombreProyecto']) && !empty($_POST['ambitoProyecto']) && !empty($_POST['diaInicio'])){
-    $sql = "INSERT INTO proyecto_inicio(nombre_proyecto, ambito_proyecto, dia_inicio_proyecto, conexion_id) VALUES (:nombreProyecto, :ambitoProyecto, :diaInicio, :conexionId)";
+if(isset($_POST['estructuraProcesos'])){
+    $getInput1 = $_POST['estructuraProcesos'];
+    $selectedOption1 = "";
+    foreach($getInput1 as $option =>$value){
+        $selectedOption1 .= $value;
+    }
+    $estru1 =  strval($selectedOption1);
+
+}
+
+if(isset($_POST['metodologiaProyecto'])){
+    $getInput2 = $_POST['metodologiaProyecto'];
+    $selectedOption2 = "";
+    foreach($getInput2 as $option =>$value){
+        $selectedOption2 .= $value;
+    }
+    $estru2 =  strval($selectedOption2);
+
+}
+
+
+
+
+
+
+
+if(isset($_POST['nombreProyecto'])){
+    $sql = "INSERT INTO proyecto_inicio(tipo_diseño, estructura_procesos, metodologia_proyecto, conexion_id, nombre_proyecto,tematica_proyecto, dia_inicio, metas_proyecto, dia_final, metas_secundarias, horario_inicio_diurno, horario_inicio_nocturno, horario_final_diurno, horario_final_nocturno, presupuesto_inicial, presupuesto_maximo, presupuesto_minimo, prototipo_conceptual, plantilla_proyecto, mapa_clientes, encuestas, posibles_inversores) VALUES (:tipo, :estructura, :metodologia, :conexionId, :nombreProyecto, :tematicaProyecto, :diaInicio, :metasProyecto, :diaFinal, :metasSecundarias, :horarioInicioDiurno, :horarioInicioNocturno, :horarioFinalDiurno, :horarioFinalNocturno, :presupuestoInicial, :presupuestoMaximo, :presupuestoMinimo, :prototipoConceptual, :plantillaProyecto, :mapaClientes, :encuestas, :posibleInversores)";
     $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':tipo', $estru);
+    $stmt->bindParam(':estructura', $estru1);
+    $stmt->bindParam(':metodologia', $estru2);
+    $stmt->bindParam(':conexionId', $_SESSION['user_id']);
     $stmt->bindParam(':nombreProyecto', $_POST['nombreProyecto']);
-    $stmt->bindParam(':ambitoProyecto', $_POST['ambitoProyecto']);
+    $stmt->bindParam(':tematicaProyecto', $_POST['tematicaProyecto']);
     $stmt->bindParam(':diaInicio', $_POST['diaInicio']);
-    $stmt->bindParam(':conexionId', $user['id']);
-    
-    
-    if($stmt->execute()) {
-        header('Location: http://localhost/Proyectos%20Anidados/loggedin.php');
-    }else {
-        $message = "Sorry an error has occured";
-    }
+    $stmt->bindParam(':metasProyecto', $_POST['metasProyecto']);
+    $stmt->bindParam(':diaFinal', $_POST['diaFinal']);
+    $stmt->bindParam('metasSecundarias', $_POST['metasSecundarias']);
+    $stmt->bindParam(':horarioInicioDiurno', $_POST['horarioInicioDiurno']);
+    $stmt->bindParam(':horarioInicioNocturno', $_POST['horarioInicioNocturno']);
+    $stmt->bindParam(':horarioFinalDiurno', $_POST['horarioFinalDiurno']);
+    $stmt->bindParam(':horarioFinalNocturno', $_POST['horarioFinalNocturno']);
+    $stmt->bindParam(':presupuestoInicial', $_POST['presupuestoInicial']);
+    $stmt->bindParam(':presupuestoMaximo', $_POST['presupuestoMaximo']);
+    $stmt->bindParam(':presupuestoMinimo', $_POST['presupuestoMinimo']);
+    $stmt->bindParam(':prototipoConceptual', $_POST['prototipoConceptual']);
+    $stmt->bindParam(':plantillaProyecto', $_POST['plantillaProyecto']);
+    $stmt->bindParam(':mapaClientes', $_POST['mapaClientes']);
+    $stmt->bindParam(':encuestas', $_POST['encuestas']);
+    $stmt->bindParam(':posibleInversores', $_POST['posibleInversores']);
+
+    $stmt->execute();
+
+    header('Location: http://localhost/Proyectos%20Anidados/loggedin.php');
 
 }
-
 
 
 ?>
@@ -67,7 +120,9 @@ if(!empty($_POST['nombreProyecto']) && !empty($_POST['ambitoProyecto']) && !empt
                 <i class="fa-solid fa-bars"></i>
             </button>
             <ul class="nav-menu">
-                
+                <li class="nav-menu-item">
+                    <a href="loggedin.php" class="nav-menu-link nav-link">Home</a>
+                </li>                      
                 <li class="nav-menu-item">
                     <a href="#" class="nav-menu-link nav-link">Por que Este Proyecto</a>
                 </li>
@@ -89,8 +144,8 @@ if(!empty($_POST['nombreProyecto']) && !empty($_POST['ambitoProyecto']) && !empt
             <div class="div1 visible">
                 <label for="" class="createProyectLabel">Nombre de Proyecto</label>
                 <input type="text" class="craateProyectInput" name="nombreProyecto" required>
-                <label for="" class="createProyectLabel">Ambito del Proyecto</label>
-                <input type="text" class="craateProyectInput" name="ambitoProyecto" required>
+                <label for="" class="createProyectLabel">Tematica de Proyecto</label>
+                <input type="text" class="craateProyectInput" name="tematicaProyecto" required>
                 <label for="" class="createProyectLabel">Dia de Inicio del Proyecto</label>
                 <input type="date" class="craateProyectInput" name="diaInicio" required>
                 <label for="" class="createProyectLabel">Metas del Proyecto</label>
@@ -101,8 +156,16 @@ if(!empty($_POST['nombreProyecto']) && !empty($_POST['ambitoProyecto']) && !empt
             <div class="div2 notVisible">
                 <label for="" class="createProyectLabel">Metas Secundarias</label>
                 <input type="text" class="craateProyectInput" name="metasSecundarias" required>
-                <label for="" class="createProyectLabel">Horarios de trabajo</label>
-                <input type="time" class="craateProyectInput" name="horarioTrabajo"required>
+                <label for="" class="createProyectLabel">Horarios de Inicio</label>
+                <label for="" class="createProyectLabel">Diurno</label>
+                <input type="time" class="craateProyectInput" name="horarioInicioDiurno"required>
+                <label for="" class="createProyectLabel">Nocturno</label>
+                <input type="time" class="craateProyectInput" name="horarioInicioNocturno"required>
+                <label for="" class="createProyectLabel">Horarios de Salida</label>
+                <label for="" class="createProyectLabel">Diurno</label>
+                <input type="time" class="craateProyectInput" name="horarioFinalDiurno"required>
+                <label for="" class="createProyectLabel">Nocturno</label>
+                <input type="time" class="craateProyectInput" name="horarioFinalNocturno"required>
                 <label for="" class="createProyectLabel">Presupuesto Inicial</label>
                 <input type="number" class="craateProyectInput" name="presupuestoInicial"required>
                 <label for="" class="createProyectLabel">Presupuesto Maximo</label>
@@ -114,21 +177,33 @@ if(!empty($_POST['nombreProyecto']) && !empty($_POST['ambitoProyecto']) && !empt
                 <label for="" class="createProyectLabel">Prototipo Conceptual</label>
                 <input type="text" class="craateProyectInput" name="prototipoConceptual" required>
                 <label for="" class="createProyectLabel">Plantilla Para Proyecto</label>
-                <input type="select" class="craateProyectInput" name="plantillaProyecto"required>
-                <label for="" class="createProyectLabel">Tipo de Diseño</label>
-                <input type="number" class="craateProyectInput" name="tipoDiseño" required>
-                <label for="" class="createProyectLabel">Estructura de Procesos</label>
-                <input type="number" class="craateProyectInput" name="estructuraProcesos"required>
-                <label for="" class="createProyectLabel">Metodologia de Proyecto</label>
-                <input type="number" class="craateProyectInput" name="metodologiaProyecto" required>
+                <input type="text" class="craateProyectInput" name="plantillaProyecto"required>
+                <label for="tipoDiseño" class="createProyectLabel" >Tipo de Diseño</label>
+                <select  class="craateProyectInput"  name="tipoDiseño[]" required>
+                    <option value="standar">Standart</option>
+                    <option value="conEstadisticas">Con estadisticas</option>
+                    <option value="premium">Premium</option>
+                </select>
+                <label for="estructuraProcesos" class="createProyectLabel"  >Estructura de Procesos</label>
+                <select class="craateProyectInput" name="estructuraProcesos[]"  required>
+                    <option value="matematico">Matematico</option>
+                    <option value="estadistico">Estadistico</option>
+                    <option value="desarrolloSoftware">Desarrollo de Software</option>
+                </select>
+                <label for="metodologiaProyecto" class="createProyectLabel" >Metodologia de Proyecto</label>
+                <select  class="craateProyectInput" name="metodologiaProyecto[]" required>
+                    <option value="cascada">En cascada</option>
+                    <option value="scrum">Scrum</option>
+                    <option value="agilStandart">Agil Standart</option>
+                </select>
             </div>
             <div class="div4 notVisible">
                 <label for="" class="createProyectLabel">Mapa de Clientes</label>
                 <input type="text" class="craateProyectInput" name="mapaClientes"required>
                 <label for="" class="createProyectLabel">Encuestas a realizar</label>
-                <input type="text" class="craateProyectInput" name="encuestasARealizar"required>
+                <input type="text" class="craateProyectInput" name="encuestas"required>
                 <label for="" class="createProyectLabel">Posibles Inversores y contratistas</label>
-                <input type="text" class="craateProyectInput" name="posiblesInversoresContratistas"required>               
+                <input type="text" class="craateProyectInput" name="posibleInversores"required>               
             </div>
 
             <div class="circles">
