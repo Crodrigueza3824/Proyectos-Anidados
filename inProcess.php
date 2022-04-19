@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if(empty($_SESSION['user_id'])){
+    header('Location: http://localhost/Proyectos%20Anidados/login.php');
+}
+
 require 'db.php';
 
 
