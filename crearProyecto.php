@@ -12,6 +12,11 @@ if(isset($_SESSION['user_id'])){
 
 }
 
+
+
+
+
+
 if(!empty($results)){
     $user = $results;
 }
@@ -54,6 +59,53 @@ if(isset($_POST['metodologiaProyecto'])){
 
 
 
+$nom = 10;
+
+$records1 = $conn->prepare('SELECT  * FROM proyecto_inicio WHERE conexion_id = :conexionId');
+$records1->bindParam(':conexionId', $_SESSION['user_id']);
+$records2 = $conn->prepare('SELECT  * FROM proyecto_inicio WHERE conexion_id = :conexionId');
+$records2->bindParam(':conexionId', $_SESSION['user_id']);
+$records3 = $conn->prepare('SELECT  * FROM proyecto_inicio');
+$records3->execute();
+$records1->execute();
+$results1 = $records1->fetch(PDO::FETCH_ASSOC);
+$records2->execute();
+$results3 = $records2->fetch(PDO::FETCH_ASSOC);
+$results5 = $records3->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+
+
+if(isset($_POST['timespent'])){
+    $records7 = $conn->prepare('SELECT tiempo FROM tiempos_creacion_proyecto WHERE tiempo_id = :id2');
+    $records7->bindParam(':id2', $_SESSION['user_id']);
+    $records7->execute();
+    $resu = $records7->fetch(PDO::FETCH_ASSOC);
+    $resu1 = $resu['tiempo'];
+    $cate = $_POST['timespent'];
+    $sumi = intval($resu1) + intval($cate);
+}
+
+
+
+
+if(isset($_POST['timespent'])){
+    $records6 = $conn->prepare('DELETE FROM tiempos_creacion_proyecto WHERE tiempo_id = :id4');
+    $records6->bindParam(':id4', $_SESSION['user_id']);
+    $records6->execute();
+
+}
+
+
+
+if(isset($_POST['timespent'])){
+    $records4 = $conn->prepare('INSERT INTO tiempos_creacion_proyecto(tiempo, tiempo_id) VALUES (:tiempo, :id3)');
+    $records4->bindParam(':tiempo', $sumi);
+    $records4->bindParam(':id3', $_SESSION['user_id']);
+    $records4->execute();
+}
+
 
 
 
@@ -83,10 +135,16 @@ if(isset($_POST['nombreProyecto'])){
     $stmt->bindParam(':mapaClientes', $_POST['mapaClientes']);
     $stmt->bindParam(':encuestas', $_POST['encuestas']);
     $stmt->bindParam(':posibleInversores', $_POST['posibleInversores']);
+    
 
-    $stmt->execute();
 
-    header('Location: http://localhost/Proyectos%20Anidados/loggedin.php');
+    if($stmt->execute()){
+
+        header('Location: http://localhost/Proyectos%20Anidados/loggedin.php');
+    }
+    
+
+    
 
 }
 
@@ -111,6 +169,7 @@ if(isset($_POST['nombreProyecto'])){
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/6b6af73380.js" crossorigin="anonymous"></script> 
     <script defer src="js/index.js"></script>
+    <script defer src="js/cronometro.js"></script>
 </head>
 <body>
 <header class="header">
@@ -213,7 +272,7 @@ if(isset($_POST['nombreProyecto'])){
                 <i class="fa-regular fa-circle dot3"></i>
             </div>
             <input type = "button" class="next1 buttonVisible" value="Siguiente"></input>
-            
+            <input class="timepage buttonNotVisible" size="5" id="timespent" name="timespent"><br>
             <div class="button2 buttonNotVisible">    
                 <input type = "button" class="previous1" value="Atras"></input>
                 <input type = "button" class="next2" value="Siguiente"></input>
