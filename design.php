@@ -1,5 +1,10 @@
 <?php
 session_start();
+if(empty($_SESSION['user_id'])){
+    header('Location: http://localhost/Proyectos%20Anidados/login.php');
+}
+
+
 include "db.php";
 
 if(isset($_SESSION['user_id'])){
