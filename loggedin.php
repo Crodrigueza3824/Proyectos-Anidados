@@ -47,9 +47,10 @@ if(isset($_SESSION['user_id'])){
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/6b6af73380.js" crossorigin="anonymous"></script>
+    <script defer src="https://kit.fontawesome.com/6b6af73380.js" crossorigin="anonymous"></script>
+    <script defer src="js/index1.js"></script>  
 </head>
-<body>
+<body class="bodi">
     <header class="header">
         <nav class="nav">
             
@@ -57,7 +58,10 @@ if(isset($_SESSION['user_id'])){
             <button class="nav-toggle" aria-label = "Abrir Menu">
                 <i class="fa-solid fa-bars"></i>
             </button>
-            <ul class="nav-menu">             
+            <ul class="nav-menu">
+                <li class="nav-menu-item">
+                    <a href="loggedin.php" class="nav-menu-link nav-link">Home</a>
+                </li>            
                 <li class="nav-menu-item">
                     <a href="#" class="nav-menu-link nav-link">Por que Este Proyecto</a>
                 </li>
@@ -67,7 +71,7 @@ if(isset($_SESSION['user_id'])){
                 <li class="nav-menu-item">
                     <a href="logout.php" class="nav-menu-link nav-link nav-menu-link_active">Cerrar Sesion</a>
                 </li>
-                <a href="#" class="Logi">
+                <a href="#" class="Logi" id = "Logi">
                     <img src="imagenes/Pupis.jpeg" class="logoInicioSession">
                 </a>
                 <label class = "perfiModi">PERFIL</label>                   
@@ -95,8 +99,16 @@ if(isset($_SESSION['user_id'])){
                     <il class="publicistaItem"></il>
                 </ul>
             </div>
+            <div class="center">
+                <a href="" class="infoEdit">Editar Informacion de Perfil</a>
+                <a href="" class="infoEdit">Notificaciones </a>
+                <a href="" class="infoEdit">Estadisticas </a>
+                <a href="" class="infoEdit">Proyectos en Proceso </a>
+                <a href="logout.php" class="infoEdit">Cerrar Session  </a>
+            </div>
         </div>
     </main>
 </body>
 <html>
+
 
